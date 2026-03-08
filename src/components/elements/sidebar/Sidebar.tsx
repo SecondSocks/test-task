@@ -1,8 +1,13 @@
+import { Dispatch, SetStateAction } from 'react'
 import { SidebarView } from './SidebarView'
 import { useSidebar } from './useSidebar'
 
-export function Sidebar() {
+interface Props {
+	setIsFilterOpen: Dispatch<SetStateAction<boolean>>
+}
+
+export function Sidebar({ setIsFilterOpen }: Props) {
 	const payload = useSidebar()
 
-	return <SidebarView {...payload} />
+	return <SidebarView setIsFilterOpen={setIsFilterOpen} {...payload} />
 }

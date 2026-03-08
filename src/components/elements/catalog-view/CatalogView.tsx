@@ -1,4 +1,3 @@
-// 'use client'
 import { ProductCard } from '@/components/elements/product-card/ProductCard'
 import { Sidebar } from '@/components/elements/sidebar/Sidebar'
 import { Button } from '@/components/ui/button/Button'
@@ -6,7 +5,7 @@ import { Select } from '@/components/ui/select/Select'
 import { SortOptionEnum } from '@/constants/sort.constants'
 import { TSort } from '@/store/catalog/catalog.types'
 import { IProduct } from '@/types/product.type'
-import { CircleArrowLeft, CircleArrowRight } from 'lucide-react'
+import { ArrowLeft, ArrowRight } from 'lucide-react'
 import { useState } from 'react'
 
 interface Props {
@@ -26,7 +25,6 @@ export function CatalogView({
 	totalCount,
 	sort,
 	page,
-	perPage,
 	visibleProducts,
 	setSort,
 	previousPage,
@@ -37,10 +35,10 @@ export function CatalogView({
 	const [isFiltersOpen, setIsFiltersOpen] = useState(false)
 
 	return (
-		<main className='mt-6 grid grid-cols-1 lg:grid-cols-[280px_1fr] gap-6 w-full'>
+		<main className='my-6 grid grid-cols-1 lg:grid-cols-[280px_1fr] gap-6 w-full'>
 			<aside className='hidden lg:block'>
 				<div className='w-70'>
-					<Sidebar />
+					<Sidebar setIsFilterOpen={setIsFiltersOpen} />
 				</div>
 			</aside>
 
@@ -50,8 +48,8 @@ export function CatalogView({
 				<div className='flex items-center gap-2 w-full'>
 					<div className='flex-1 min-w-0 sm:max-w-xs'>
 						<Select
-							value={sort ?? 'none'}
-							onChange={e => setSort(e.target.value as any)}
+							value={sort ?? ''}
+							onChange={e => setSort(e.target.value as TSort)}
 							className='w-full'
 						>
 							<option value='Не выбрано'>Не выбрано</option>
@@ -87,7 +85,7 @@ export function CatalogView({
 						id='mobile-filters'
 						className='lg:hidden rounded-xl border border-border bg-surface p-3'
 					>
-						<Sidebar />
+						<Sidebar setIsFilterOpen={setIsFiltersOpen} />
 					</div>
 				)}
 
@@ -103,16 +101,13 @@ export function CatalogView({
 					{hasMore && <Button onClick={showMore}>Показать ещё</Button>}
 				</div>
 
-				<div className='flex justify-center mt-4 gap-2'>
+				<div className='flex items-center justify-center mt-2 gap-2'>
 					{page > 1 && (
-						<CircleArrowLeft
-							onClick={previousPage}
-							className='cursor-pointer'
-						/>
+						<ArrowLeft onClick={previousPage} className='cursor-pointer' />
 					)}
 					<span className='px-3 py-1 rounded-md bg-surface-alt'>{page}</span>
 					{hasMore && (
-						<CircleArrowRight onClick={nextPage} className='cursor-pointer' />
+						<ArrowRight onClick={nextPage} className='cursor-pointer' />
 					)}
 				</div>
 			</section>

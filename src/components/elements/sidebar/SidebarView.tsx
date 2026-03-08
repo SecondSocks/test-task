@@ -11,6 +11,7 @@ interface Props {
 	max: number
 	setMin: Dispatch<SetStateAction<number>>
 	setMax: Dispatch<SetStateAction<number>>
+	setIsFilterOpen: Dispatch<SetStateAction<boolean>>
 	toggleBrand: (id: string) => void
 	applyFilter: () => void
 	handleReset: () => void
@@ -22,6 +23,7 @@ export function SidebarView({
 	max,
 	setMax,
 	setMin,
+	setIsFilterOpen,
 	toggleBrand,
 	applyFilter,
 	handleReset,
@@ -35,15 +37,15 @@ export function SidebarView({
 				<div className='flex flex-col gap-2'>
 					<div className='flex gap-2'>
 						<Input
-							type='number'
-							value={min}
+							value={min || 1}
+							min={1}
 							onChange={e => setMin(Number(e.target.value))}
 							placeholder='Мин:'
 						/>
 
 						<Input
-							type='number'
-							value={max}
+							value={max || 2}
+							min={2}
 							onChange={e => setMax(Number(e.target.value))}
 							placeholder='Макс:'
 						/>
@@ -78,7 +80,14 @@ export function SidebarView({
 			</div>
 
 			<div className='flex flex-col gap-2 mt-10'>
-				<Button onClick={applyFilter}>Применить</Button>
+				<Button
+					onClick={() => {
+						applyFilter()
+						setIsFilterOpen(false)
+					}}
+				>
+					Применить
+				</Button>
 				<Button variant='secondary' onClick={handleReset}>
 					Сбросить
 				</Button>

@@ -1,30 +1,15 @@
 import { TSort } from '@/store/catalog/catalog.types'
 import { IProduct } from '@/types/product.type'
 
+const sortMap = {
+	'По возрастанию': (a: IProduct, b: IProduct) => a.price - b.price,
+	'По убыванию': (a: IProduct, b: IProduct) => b.price - a.price,
+	'По рейтингу': (a: IProduct, b: IProduct) => b.rating.value - a.rating.value,
+	'По популярности': (a: IProduct, b: IProduct) =>
+		b.rating.reviewsCount - a.rating.reviewsCount,
+}
+
 export function sortProducts(products: IProduct[], sort?: TSort) {
-	const copy = [...products]
-
-	if (!sort) return copy
-
-	switch (sort) {
-		case 'По возрастанию':
-			return products.sort(
-				(product1, product2) => product1.price - product2.price,
-			)
-		case 'По убыванию':
-			return products.sort(
-				(product1, product2) => product2.price - product1.price,
-			)
-		case 'По рейтингу':
-			return products.sort(
-				(product1, product2) => product2.rating.value - product1.rating.value,
-			)
-		case 'По популярности':
-			return products.sort(
-				(product1, product2) =>
-					product2.rating.reviewsCount - product1.rating.reviewsCount,
-			)
-		default:
-			return copy
-	}
+	if (!sort) return products
+	return [...products].sort(sortMap[sort])
 }

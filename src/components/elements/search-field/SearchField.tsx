@@ -1,28 +1,11 @@
 'use client'
 
 import { Input } from '@/components/ui/input/Input'
-import { useDebounce } from '@/hooks/useDebounce'
-import { PRODUCTS } from '@/mock/products.mock'
-import { IProduct } from '@/types/product.type'
 import Link from 'next/link'
-import { useMemo, useState } from 'react'
+import { useSearchField } from './useSearchField'
 
 export function SearchField() {
-	const [value, setValue] = useState('')
-
-	const debouncedValue = useDebounce(value, 300)
-
-	const foundProducts = useMemo<IProduct[]>(() => {
-		if (!debouncedValue) return []
-
-		const query = debouncedValue.toLowerCase()
-
-		return PRODUCTS.filter(
-			product =>
-				product.title.toLowerCase().includes(query) ||
-				product.slug.toLowerCase().includes(query),
-		)
-	}, [debouncedValue])
+	const { value, setValue, foundProducts } = useSearchField()
 
 	return (
 		<div className='relative flex flex-col gap-2'>
