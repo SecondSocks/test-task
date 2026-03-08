@@ -7,17 +7,22 @@ export function useSearchField() {
 	const [value, setValue] = useState('')
 
 	const debouncedValue = useDebounce(value, 300)
+	const normalizedValue = debouncedValue.trim()
 
 	const foundProducts = useMemo<IProduct[]>(() => {
-		if (!debouncedValue) return []
+		if (!normalizedValue) return []
 
-		const query = debouncedValue.toLowerCase()
+		const query = normalizedValue.toLowerCase()
 
 		return PRODUCTS.filter(
 			product =>
 				product.title.toLowerCase().includes(query) ||
 				product.slug.toLowerCase().includes(query),
 		)
-	}, [debouncedValue])
-	return { value, foundProducts, setValue }
+	}, [normalizedValue])
+
+	const shouldShowResults = Boolean(normalizedValue)
+	const isNothingFound = shouldShowResults && foundProducts.length === 0
+
+	return { value, foundProducts, shouldShowResults, isNothingFound, setValue }
 }
