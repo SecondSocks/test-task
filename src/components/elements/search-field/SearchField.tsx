@@ -27,12 +27,14 @@ export function SearchField() {
 								href={`/product/${product.id}`}
 								key={product.id}
 								className='flex p-2 items-center gap-2'
+								onClick={() => setValue('')}
 							>
 								<img src={product.images[0]} className='size-6 lg:size-8' />
 								<div>
 									<h3>{product.title}</h3>
 									<p className='text-text-muted'>
-										Бренд: <span className='text-text'>{product.brand.name}</span>
+										Бренд:{' '}
+										<span className='text-text'>{product.brand.name}</span>
 									</p>
 								</div>
 							</Link>

@@ -1,5 +1,6 @@
 import { Button } from '@/components/ui/button/Button'
-import { Heart, Link } from 'lucide-react'
+import { Heart } from 'lucide-react'
+import Link from 'next/link'
 
 // Сгенерировано ИИ
 export function EmptyFavoritesPageView() {

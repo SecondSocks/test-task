@@ -88,7 +88,13 @@ export function SidebarView({
 				>
 					Применить
 				</Button>
-				<Button variant='secondary' onClick={handleReset}>
+				<Button
+					variant='secondary'
+					onClick={() => {
+						handleReset()
+						setIsFilterOpen(false)
+					}}
+				>
 					Сбросить
 				</Button>
 			</div>
