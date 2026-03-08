@@ -1,26 +1,207 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+	--font-sans: 'Inter', ui-sans-serif, system-ui;
+
+	--color-primary: #0077e6;
+	--color-primary-soft: #addbff;
+	--color-text: #1c1917;
+	--color-text-muted: #6b7280;
+	--color-surface: #ffffff;
+	--color-surface-alt: #f3f4f6;
+	--color-border: #e5e7eb;
+	--color-bg: #ffffff;
+
+	--radius-sm: 6px;
+	--radius-md: 10px;
+	--radius-lg: 14px;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+@layer theme {
+	:root.dark {
+		--color-bg: #0b0f17;
+		--color-text: #e5e7eb;
+		--color-text-muted: #9ca3af;
+		--color-surface: #111827;
+		--color-surface-alt: #1f2937;
+		--color-border: #374151;
+		--color-primary: #4da3ff;
+	}
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html,
+body {
+	width: 100%;
+	overflow-x: hidden;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+	background: var(--color-bg);
+	color: var(--color-text);
+	font-family: var(--font-sans);
+	margin: 0 auto;
+}
+
+h1 {
+	font-weight: 700;
+	font-size: 36px;
+	line-height: 40px;
+}
+
+h2 {
+	font-weight: 600;
+	font-size: 24px;
+	line-height: 32px;
+}
+
+h3 {
+	font-weight: 600;
+	font-size: 18px;
+	line-height: 24px;
+}
+
+h4 {
+	font-weight: 700;
+	font-size: 16px;
+	line-height: 20px;
+}
+
+h5 {
+	font-weight: 600;
+	font-size: 16px;
+	line-height: 20px;
+}
+
+h6 {
+	font-weight: 500;
+	font-size: 16px;
+	line-height: 20px;
+}
+
+.caption {
+	font-weight: 500;
+	font-size: 14px;
+	line-height: 16px;
+}
+
+.bodyL {
+	font-weight: 400;
+	font-size: 16px;
+	line-height: 24px;
+}
+
+.bodyM {
+	font-weight: 500;
+	font-size: 14px;
+	line-height: 18px;
+}
+
+.bodyS {
+	font-weight: 500;
+	font-size: 12px;
+	line-height: 16px;
+	letter-spacing: 0.1px;
+}
+
+.headline {
+	font-weight: 600;
+	font-size: 12px;
+	line-height: 16px;
+	letter-spacing: 0.4px;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.caption,
+.bodyL,
+.bodyM {
+	letter-spacing: 0;
+}
+
+.menu-item {
+	@apply w-full text-left px-4 py-2 text-sm hover:bg-surface-alt transition;
+}
+
+/* Сгенерировано ИИ */
+
+input[type='range'].range-min,
+input[type='range'].range-max,
+input[type='range'] {
+	-webkit-appearance: none;
+	appearance: none;
+	margin: 0;
+	padding: 0;
+	background: transparent;
+}
+
+/* track transparent because we draw track manually */
+input[type='range']::-webkit-slider-runnable-track {
+	background: transparent;
+	height: 6px;
+}
+input[type='range']::-moz-range-track {
+	background: transparent;
+	height: 6px;
+}
+
+/* Thumb styling */
+input[type='range']::-webkit-slider-thumb {
+	-webkit-appearance: none;
+	appearance: none;
+	width: 18px;
+	height: 18px;
+	border-radius: 9999px;
+	background: var(--color-surface, #fff);
+	border: 3px solid var(--color-primary, #0077e6);
+	box-shadow: 0 4px 10px rgba(16, 24, 40, 0.12);
+	cursor: pointer;
+	margin-top: -7px; /* vertically center over 2px track + margins */
+}
+input[type='range']::-moz-range-thumb {
+	width: 18px;
+	height: 18px;
+	border-radius: 9999px;
+	background: var(--color-surface, #fff);
+	border: 3px solid var(--color-primary, #0077e6);
+	box-shadow: 0 4px 10px rgba(16, 24, 40, 0.12);
+	cursor: pointer;
+}
+
+/* Make left thumb smaller hit area sometimes causes issues, enlarge hit area */
+input[type='range'] {
+	/* increase touch target without changing visible thumb by using padding on pseudo element is complex;
+     make the input height larger (we already set h-8 on inputs) so hit area increases */
+	pointer-events: auto;
+}
+
+/* z-index controls: right (max) should be on top of left (min) so it can be grabbed when overlapped */
+.range-min {
+	z-index: 30; /* below range-max */
+}
+.range-max {
+	z-index: 40; /* above range-min */
+}
+
+/* Focus styles */
+input[type='range']:focus::-webkit-slider-thumb {
+	box-shadow: 0 6px 14px rgba(16, 24, 40, 0.18);
+	transform: scale(1.03);
+	transition: transform 120ms ease;
+}
+
+/* Optional: make thumbs slightly larger on hover for desktop */
+input[type='range']::-webkit-slider-thumb:hover {
+	transform: scale(1.06);
+	transition: transform 120ms ease;
+}
+
+/* Firefox fixes for transparent track clicks */
+input[type='range']::-moz-range-progress {
+	background: transparent;
 }

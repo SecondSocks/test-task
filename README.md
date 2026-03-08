@@ -1,36 +1,156 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# TechStore
 
-## Getting Started
+Frontend-приложение интернет-магазина электроники на Next.js (App Router) с каталогом, фильтрацией, карточками товара, избранным и корзиной.
 
-First, run the development server:
+## О проекте
+
+TechStore реализует пользовательский сценарий витрины магазина:
+
+- просмотр каталога и категорий;
+- фильтрация по бренд
+- ам и диапазону цен;
+- сортировка и пагинация;
+- просмотр карточки товара;
+- добавление товаров в корзину;
+- расчет итоговой суммы с промокодами;
+- переключение светлой/темной темы.
+
+Источник данных в текущей версии — локальные mock-данные (`src/mock/*`).
+
+## Технологический стек
+
+### Основные библиотеки
+
+- `next@16` — фреймворк (App Router, SSR/CSR гибрид).
+- `react@19`, `react-dom@19` — UI и реактивность.
+- `typescript@5` — типизация.
+- `zustand@5` — глобальное состояние.
+- `tailwindcss@4` + `@tailwindcss/postcss` — стили и дизайн-токены.
+- `lucide-react` — иконки.
+- `clsx` + `tailwind-merge` — утилиты для сборки className.
+
+### Инструменты сборки
+
+- `next build` — production-сборка.
+- `next start` — запуск production-сервера.
+- `next dev` — локальная разработка.
+
+### ИИ, используемые в разработке
+
+- ChatGPT
+- Codex
+- ~15-20% сгенерированного кода
+
+## Архитектура
+
+Проект организован по feature/UI-слоям.
+
+```text
+src/
+  app/                      # Маршруты Next.js (App Router)
+  components/
+    containers/             # Контейнеры страниц и layout
+    elements/               # Крупные переиспользуемые UI-блоки
+    ui/                     # Базовые UI-компоненты
+  store/                    # Zustand-сторы
+  mock/                     # Локальные данные (товары, категории, бренды, промокоды)
+  utils/                    # Чистые функции (фильтрация, сортировка, промо и пр.)
+  hooks/                    # Общие хуки
+  types/                    # Доменные типы
+```
+
+### Поток данных
+
+1. Данные загружаются из `src/mock/*` в Zustand-сторы (например, `product.store`).
+2. Хуки страниц (`useHomePage`, `useCategoryPage`, `useCartPage`) получают состояние и действия из стора.
+3. На уровне `utils` применяется бизнес-логика:
+   - `filter-products.ts` — фильтрация;
+   - `sort-products.ts` — сортировка;
+   - `apply-promo.ts` — расчет скидки по промокоду.
+4. `View`-компоненты отображают готовые данные и вызывают действия стора.
+
+### Управление состоянием (Zustand)
+
+- `catalog.store.ts` — фильтры, сортировка, пагинация.
+- `product.store.ts` — список товаров и флаги в самом объекте товара (`isFavorite`, `isCompared`).
+- `product-flags.store.ts` — persist-хранилище `favoriteIds/comparedIds`.
+- `cart.store.ts` — корзина и количество товаров.
+- `theme.store.ts` — тема (`light/dark`) с `persist`.
+
+## Маршруты (endpoint-ы)
+
+В проекте используются endpoint-ы страниц Next.js (не REST API).
+
+| Endpoint               | Назначение                                                 |
+| ---------------------- | ---------------------------------------------------------- |
+| `/`                    | Главная страница каталога                                  |
+| `/category/[slug]`     | Список товаров по категории/спец-слагу (`new`, `discount`) |
+| `/product/[productId]` | Страница товара                                            |
+| `/cart`                | Корзина                                                    |
+| `/favorites`           | Избранные товары                                           |
+
+### API endpoint-ы
+
+На текущий момент `src/app/api/*` отсутствует — backend/API-роуты не реализованы.
+
+## Запуск проекта
+
+### Требования
+
+- Node.js 20+ (рекомендуется LTS)
+- npm или bun
+
+### Установка зависимостей
+
+```bash
+npm install
+```
+
+или
+
+```bash
+bun install
+```
+
+### Режим разработки
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Приложение будет доступно на `http://localhost:3000`.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Сборка
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm run build
+```
 
-## Learn More
+Запуск production-версии локально:
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+npm run start
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Деплой
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### Вариант 1: Vercel (рекомендуется для Next.js)
 
-## Deploy on Vercel
+1. Подключить репозиторий в Vercel.
+2. Framework Preset: `Next.js`.
+3. Build Command: `npm run build`.
+4. Start Command: `npm run start` (обычно определяется автоматически).
+5. Выполнить Deploy.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### Вариант 2: Собственный Node.js сервер/VPS
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+1. Установить зависимости: `npm install`.
+2. Собрать проект: `npm run build`.
+3. Запустить: `npm run start`.
+4. Проксировать трафик через Nginx/Caddy на порт приложения (по умолчанию `3000`).
+
+## Текущее состояние и ограничения
+
+- Данные хранятся локально в mock-файлах, без внешнего API и БД.
+- Часть состояния персистится в `localStorage` (тема, флаги избранного/сравнения).
+- Переменные окружения в текущей версии не используются.
