@@ -1,4 +1,4 @@
-import { TSort } from '@/store/catalog/catalog.store'
+import { TSort } from '@/store/catalog/catalog.types'
 import { IProduct } from '@/types/product.type'
 
 export function sortProducts(products: IProduct[], sort?: TSort) {
